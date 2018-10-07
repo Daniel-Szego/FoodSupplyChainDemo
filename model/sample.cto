@@ -1,0 +1,132 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Experiental implementation of a green supply chain.
+ */
+
+namespace org.supplychain.green.model
+
+/**
+ * ASSETS
+ */
+
+enum AssetStatus {
+  o CREATED 
+  o ON_THE_ROAD
+  o SOLD
+}
+
+abstract asset GHGcarrierAsset identified by assetId {
+  o String assetId
+  o AssetStatus assetStatus
+  o Double aggregatedGHG
+  --> GHGproducerCompany atCompany
+}
+
+abstract asset PhisicalAsset extends GHGcarrierAsset {
+  o Double amount
+}
+
+abstract asset LiquidAsset extends GHGcarrierAsset {
+  o Double amount
+}
+
+enum CellPhoneType {
+  o LENOVO
+  o ZTE
+  o XIAOMI
+}
+
+asset CellPhone extends PhisicalAsset {
+  o CellPhoneType cellPhoneType
+}
+
+/**
+ * PARTICIPANTS
+ */
+
+concept CompanyAddress {
+  o String country
+  o String city optional
+  o String street optional
+  o Integer hauseNr optional
+}
+
+abstract participant GHGproducerCompany identified by participantId {
+  o String participantId
+  o String companyName
+  o CompanyAddress companyAddress
+  o Double GHG 
+}
+
+participant ManufacturerCompany extends GHGproducerCompany {
+  
+}
+
+participant SalesCompany extends GHGproducerCompany {
+  
+}
+
+participant RelayCompany extends GHGproducerCompany {
+  
+}
+
+participant TransportationCompany extends GHGproducerCompany {
+  --> GHGproducerCompany[] transportFrom
+}
+
+/**
+ * TRANSACTION
+ */
+
+transaction InitTestData {
+}
+
+transaction ClearData {
+}
+
+transaction Transfer {
+  --> GHGcarrierAsset assetToTransfer
+  --> GHGproducerCompany fromCompany
+  --> GHGproducerCompany toCompany
+}
+
+transaction Produce {
+  --> ManufacturerCompany manufacturerCompany
+}
+
+transaction Sell {
+  --> GHGcarrierAsset assetToSell  
+  --> SalesCompany salesCompany
+}
+
+/**
+ * EVENTS
+ */
+
+event AssetCreated {
+  --> GHGcarrierAsset gHGcarrierAsset
+  o Double creationGHG
+}
+
+event AssetTransferred {
+  --> GHGcarrierAsset gHGcarrierAsset
+  o Double transferGHG
+}
+
+event AssetSold {
+  --> GHGcarrierAsset gHGcarrierAsset
+  o Double sellingGHG
+}
