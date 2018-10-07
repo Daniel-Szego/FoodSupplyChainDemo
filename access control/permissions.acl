@@ -12,6 +12,86 @@
  * limitations under the License.
  */
 
+rule ProductionStateCanNotManageParticipants {
+    description: "Members of the Production State roles can not manage participants"
+    participant: "org.supplychain.food.model.Production"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.food.model.SupplyChainState"
+    action: DENY
+}
+
+rule ProductionStateCanOnlyCreate {
+    description: "Members of the ProductionState roles can only create and read asset"
+    participant: "org.supplychain.food.model.Production"
+    operation: UPDATE, DELETE
+    resource: "org.supplychain.food.model.LiveAsset"
+    action: DENY
+}
+
+rule ProcessingStateCanNotManageParticipants {
+    description: "Members of the Processing State roles can not manage participants"
+    participant: "org.supplychain.food.model.Processing"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.food.model.SupplyChainState"
+    action: DENY
+}
+
+rule ProcessingStateCanOnlyUpdate {
+    description: "Members of the Processing roles can only update and read asset"
+    participant: "org.supplychain.food.model.Processing"
+    operation: CREATE, DELETE
+    resource: "org.supplychain.food.model.LiveAsset"
+    action: DENY
+}
+
+rule DistributionStateCanNotManageParticipants {
+    description: "Members of the Distribution State roles can not manage participants"
+    participant: "org.supplychain.food.model.Distribution"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.food.model.SupplyChainState"
+    action: DENY
+}
+
+rule DistributionStateCanOnlyUpdate {
+    description: "Members of the Distribution roles can only update and read asset"
+    participant: "org.supplychain.food.model.Distribution"
+    operation: CREATE, DELETE
+    resource: "org.supplychain.food.model.LiveAsset"
+    action: DENY
+}
+
+rule RetailStateCanNotManageParticipants {
+    description: "Members of the Retail State roles can not manage participants"
+    participant: "org.supplychain.food.model.Retail"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.food.model.SupplyChainState"
+    action: DENY
+}
+
+rule RetailStateCanOnlyUpdate {
+    description: "Members of the Retail roles can only update and read asset"
+    participant: "org.supplychain.food.model.Retail"
+    operation: CREATE, DELETE
+    resource: "org.supplychain.food.model.LiveAsset"
+    action: DENY
+}
+
+rule RestaurantStateCanNotManageParticipants {
+    description: "Members of the Restaurant State roles can not manage participants"
+    participant: "org.supplychain.food.model.Restaurant"
+    operation: CREATE, UPDATE, DELETE
+    resource: "org.supplychain.food.model.SupplyChainState"
+    action: DENY
+}
+
+rule RestaurantStateCanOnlyDelete {
+    description: "Members of the Restaurant roles can only update and read asset"
+    participant: "org.supplychain.food.model.Restaurant"
+    operation: CREATE, UPDATE
+    resource: "org.supplychain.food.model.LiveAsset"
+    action: DENY
+}
+
 rule EvrybodyCanDoEverything {
     description: "Everybody can do everything"
     participant: "**"
