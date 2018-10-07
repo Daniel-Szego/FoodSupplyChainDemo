@@ -1,0 +1,129 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace org.supplychain.food.model
+
+/**
+ * ASSETS
+ */
+
+enum AssetStatus {
+  o LIVE 
+  o PROCESSED
+  o CONSUMED
+}
+
+abstract asset LiveAsset identified by assetId {
+  o String assetId
+  o AssetStatus assetStatus
+  o Double aggregatedGHG
+  --> SupplyChainState atState
+}
+
+abstract asset Vegetables extends LiveAsset {
+  o Double amount
+}
+
+abstract asset Animals extends LiveAsset {
+  o Integer amount
+}
+
+asset Cow extends Animals{
+}
+
+asset Steak extends Animals{
+}
+
+
+/**
+ * PARTICIPANTS
+ */
+
+concept Address {
+  o String country
+  o String city optional
+  o String street optional
+  o Integer hauseNr optional
+}
+
+abstract participant SupplyChainState identified by stateId {
+  o String stateId
+  o String stateName
+  o Address stateAddress
+  o Double GHG 
+}
+
+participant Production extends SupplyChainState {
+  
+}
+
+participant Processing extends SupplyChainState {
+  
+}
+
+participant Distribution extends SupplyChainState {
+  
+}
+
+participant Retail extends SupplyChainState {
+  
+}
+
+participant Restaurant extends SupplyChainState {
+  
+}
+
+/**
+ * TRANSACTION
+ */
+
+transaction InitTestData {
+}
+
+transaction ClearData {
+}
+
+transaction Process {
+  --> LiveAsset liveAsset
+  --> SupplyChainState fromState
+  --> SupplyChainState toState
+}
+
+transaction Produce {
+  --> LiveAsset liveAsset
+}
+
+transaction Consume {
+  --> LiveAsset liveAsset
+  --> SupplyChainState atState
+}
+
+/**
+ * EVENTS
+ */
+
+event AssetProduced {
+  --> LiveAsset liveAsset
+  o Double creationGHG
+}
+
+event AssetProcessed {
+  --> LiveAsset liveAsset
+  o Double transferGHG
+}
+
+event AssetConsumed {
+  --> LiveAsset liveAsset
+  o Double sellingGHG
+}
