@@ -12,82 +12,13 @@
  * limitations under the License.
  */
 
-/**
- * Example access control list for the green supply chain.
- */
-
-rule ManufacturerCompanyCanNotManageParticipants {
-    description: "Members of the GasFieldState roles can not manage participants"
-    participant: "org.supplychain.green.model.ManufacturerCompany"
-    operation: CREATE, UPDATE, DELETE
-    resource: "org.supplychain.green.model.GHGproducerCompany"
-    action: DENY
-}
-
-rule ManufacturerCanOnlyCreate {
-    description: "Members of the manufacturing roles can only create and read asset"
-    participant: "org.supplychain.green.model.ManufacturerCompany"
-    operation: UPDATE, DELETE
-    resource: "org.supplychain.green.model.GHGcarrierAsset"
-    action: DENY
-}
-
-rule TransportationCompanyCanNotManageParticipants {
-    description: "Members of the GasFieldState roles can not manage participants"
-    participant: "org.supplychain.green.model.TransportationCompany"
-    operation: CREATE, UPDATE, DELETE
-    resource: "org.supplychain.green.model.GHGproducerCompany"
-    action: DENY
-}
-
-rule TransportationCanOnlyUpdate {
-    description: "Members of the transportation roles can only update and read an asset"
-    participant: "org.supplychain.green.model.TransportationCompany"
-    operation: UPDATE, DELETE
-    resource: "org.supplychain.green.model.GHGcarrierAsset"
-    action: DENY
-}
-
-rule RelayCompanyCanNotManageParticipants {
-    description: "Members of the RelayCompany roles can not manage participants"
-    participant: "org.supplychain.green.model.RelayCompany"
-    operation: CREATE, UPDATE, DELETE
-    resource: "org.supplychain.green.model.GHGproducerCompany"
-    action: DENY
-}
-
-rule RelayCompanyCanOnlyUpdate {
-    description: "Members of the relay company roles can only update and read an asset"
-    participant: "org.supplychain.green.model.RelayCompany"
-    operation: UPDATE, DELETE
-    resource: "org.supplychain.green.model.GHGcarrierAsset"
-    action: DENY
-}
-
-rule SalesCompanyCanNotManageParticipants {
-    description: "Members of the RelayCompany roles can not manage participants"
-    participant: "org.supplychain.green.model.SalesCompany"
-    operation: CREATE, UPDATE, DELETE
-    resource: "org.supplychain.green.model.GHGproducerCompany"
-    action: DENY
-}
-
-rule SalesCanNotDelete {
-    description: "Members of the sales company roles can not delete"
-    participant: "org.supplychain.green.model.SalesCompany"
-    operation: UPDATE, DELETE
-    resource: "org.supplychain.green.model.GHGcarrierAsset"
-    action: DENY
-}
-
-rule EverybodyCanDOEverything {
-    description: "Allow all participants can do everything"
+rule EvrybodyCanDoEverything {
+    description: "Everybody can do everything"
     participant: "**"
     operation: ALL
     resource: "**"
     action: ALLOW
 }
-
 
 
 
