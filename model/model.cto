@@ -62,6 +62,7 @@ abstract participant SupplyChainState identified by stateId {
   o String stateName
   o Address stateAddress
   o Double GHG 
+  --> SupplyChainState [] stateFrom optional
 }
 
 participant Production extends SupplyChainState {
