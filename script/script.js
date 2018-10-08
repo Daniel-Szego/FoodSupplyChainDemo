@@ -228,18 +228,19 @@ async function ProduceFunctionCow(param) {
  * @transaction
  */
 async function ConsumeFunction(param) {  
-	let assetToTransfer = param.assetToSell;
+  	let assetToConsume = param.liveAsset;
+    let restaurant = param.atRestaurant;
     let factory = await getFactory();
  	
-  	assetToTransfer.assetStatus = "SOLD";
+  	assetToConsume.assetStatus = "CONSUMED";
   	
-    const cellPhoneReg = await getAssetRegistry(namespace + '.CellPhone'); 
-    await cellPhoneReg.update(assetToTransfer);    
+    const restaurantReg = await getAssetRegistry(namespace + '.LiveAsset'); 
+    await restaurantReg.update(restaurant);    
   
   	// emitting Sold event
 
-    let soldEvent = factory.newEvent('org.supplychain.green.model', 'AssetSold');
-  	soldEvent.gHGcarrierAsset = assetToTransfer;
-  	soldEvent.sellingGHG = assetToTransfer.aggregatedGHG;
-    await emit(soldEvent);  	
+    let consumedEvent = factory.newEvent('org.supplychain.green.model', 'AssetConsumed');
+  	consumedEvent.liveAsset = assetToConsume;
+  	consumedEvent.endGHG = assetToConsume.aggregatedGHG;
+    await emit(consumedEvent);  	
 }

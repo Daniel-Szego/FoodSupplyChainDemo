@@ -87,7 +87,7 @@ rule RestaurantStateCanNotManageParticipants {
 rule RestaurantStateCanOnlyDelete {
     description: "Members of the Restaurant roles can only update and read asset"
     participant: "org.supplychain.food.model.Restaurant"
-    operation: CREATE, UPDATE
+    operation: CREATE
     resource: "org.supplychain.food.model.LiveAsset"
     action: DENY
 }
@@ -99,6 +99,3 @@ rule EvrybodyCanDoEverything {
     resource: "**"
     action: ALLOW
 }
-
-
-

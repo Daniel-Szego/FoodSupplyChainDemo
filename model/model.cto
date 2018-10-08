@@ -126,5 +126,5 @@ event AssetProcessed {
 
 event AssetConsumed {
   --> LiveAsset liveAsset
-  o Double sellingGHG
+  o Double endGHG
 }
