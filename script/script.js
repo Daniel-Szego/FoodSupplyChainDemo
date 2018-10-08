@@ -22,7 +22,7 @@ async function InitTestDataFunction(param) {
   	// adding Production state 
     const productionReg = await getParticipantRegistry(namespace + '.Production');   
     const production = await factory.newResource(namespace, 'Production', "1");
-    production.stateName = "Cell phone Manufacturer Inc.";
+    production.stateName = "Production";
     production.GHG = baseline;
     const newAddress = await factory.newConcept(namespace, 'Address');
 	newAddress.country = "Bejing";
@@ -38,7 +38,7 @@ async function InitTestDataFunction(param) {
 
     const processingReg = await getParticipantRegistry(namespace + '.Processing');   
     const processing = await factory.newResource(namespace, 'Processing', "2");
-    processing.stateName = "Truck Transport Inc.";
+    processing.stateName = "Processing";
     processing.GHG = baseline / 2;
     const newAddress2 = await factory.newConcept(namespace, 'Address');
 	newAddress2.country = "Hong Kong";
@@ -56,7 +56,7 @@ async function InitTestDataFunction(param) {
 
     const distributionReg = await getParticipantRegistry(namespace + '.Distribution');   
     const distribution = await factory.newResource(namespace, 'Distribution', "3");
-    distribution.stateName = "Harbour";
+    distribution.stateName = "Distribution";
     distribution.GHG = baseline / 1.75;
     const newAddress5 = await factory.newConcept(namespace, 'Address');
 	newAddress5.country = "China";
@@ -73,7 +73,7 @@ async function InitTestDataFunction(param) {
   
     const retailReg = await getParticipantRegistry(namespace + '.Retail'); 
     const retail = await factory.newResource(namespace, 'Retail', "4");
-    retail.stateName = "Shipping Inc.";
+    retail.stateName = "Retail";
     retail.GHG = baseline * 1.5;
     const newAddress3 = await factory.newConcept(namespace, 'Address');
 	newAddress3.country = "Sydney";
@@ -91,7 +91,7 @@ async function InitTestDataFunction(param) {
 
     const restaurantReg = await getParticipantRegistry(namespace + '.Restaurant'); 
     const restaurant = await factory.newResource(namespace, 'Restaurant', "5");
-    restaurant.stateName = "Harbour";
+    restaurant.stateName = "Restaurant";
     restaurant.GHG = baseline * 1.25;
     const newAddress6 = await factory.newConcept(namespace, 'Address');
 	newAddress6.country = "Italy";
@@ -191,35 +191,34 @@ async function ProcessFunction(param) {
  * @param {org.supplychain.food.model.Produce} param - model instance
  * @transaction
  */
-async function ProduceFunction(param) {  
-	let manCompany = param.manufacturerCompany;
+async function ProduceFunctionCow(param) {  
+    let production = param.atProduction;
     let factory = await getFactory();
   
     // creating cell phone
-    const cellPhoneReg = await getAssetRegistry(namespace + '.CellPhone');   
+    const cowReg = await getAssetRegistry(namespace + '.Cow');   
 
     // getting next id
-    let existingPhones = await cellPhoneReg.getAll();
-  	let numberOfPhones = 0;
+    let existingCows = await cowReg.getAll();
+  	let numberOfCows = 0;
   
-    await existingPhones.forEach(function (phone) {
-      numberOfPhones ++;
+    await existingCows.forEach(function (cow) {
+      numberOfCows ++;
     });
- 	numberOfPhones ++; 	
+ 	numberOfCows ++; 	
 
-    const newCellPhone = await factory.newResource(namespace, 'CellPhone', numberOfPhones.toString());
-    newCellPhone.assetStatus = "CREATED";
-    newCellPhone.aggregatedGHG = manCompany.GHG;
-    newCellPhone.atCompany = manCompany;
-    newCellPhone.cellPhoneType = "LENOVO";
-    newCellPhone.amount = 1;
-    await cellPhoneReg.add(newCellPhone);       
+    const cow = await factory.newResource(namespace, 'Cow', numberOfCows.toString());
+    cow.assetStatus = "LIVE";
+    cow.aggregatedGHG = production.GHG;
+    cow.atState = production;
+    cow.amount = 1;
+    await cowReg.add(cow);       
   
   	// emitting create event
 
-    let createEvent = factory.newEvent('org.supplychain.green.model', 'AssetCreated');
-  	createEvent.gHGcarrierAsset = newCellPhone;
-  	createEvent.creationGHG = newCellPhone.aggregatedGHG;
+    let createEvent = factory.newEvent(namespace, 'AssetProduced');
+  	createEvent.liveAsset = cow;
+  	createEvent.creationGHG = cow.aggregatedGHG;
     await emit(createEvent);  	
 }
 

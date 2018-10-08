@@ -102,12 +102,12 @@ transaction Process {
 }
 
 transaction Produce {
-  --> LiveAsset liveAsset
+ --> Production atProduction
 }
 
 transaction Consume {
   --> LiveAsset liveAsset
-  --> SupplyChainState atState
+  --> Restaurant atRestaurant
 }
 
 /**
