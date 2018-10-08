@@ -65,6 +65,7 @@ async function InitTestDataFunction(param) {
     newAddress5.hauseNr = 4;
   	distribution.stateAddress = newAddress5;
     distribution.stateFrom = new Array();
+    distribution.stateFrom.push(processing);
 
     await distributionReg.add(distribution);       
   
@@ -177,10 +178,13 @@ async function ProcessFunction(param) {
     liveAsset.aggregatedGHG = liveAsset.aggregatedGHG + toState.GHG;     	  
     
     if (fromState.$type == "Processing") {
-    	// producing meat from cow
-     	 
-    	
-      	
+    	// producing meat from cow     	 
+    	// delete cow
+		let liveAssetReg = await getAssetRegistry(namespace + '.Cow');        
+		liveAssetReg.remove(liveAsset);
+            
+        // create 2 Steaks
+     	await ProduceMeat(toState); 
       
     } else {
     	
@@ -204,11 +208,41 @@ async function ProcessFunction(param) {
 	    let transferEvent = factory.newEvent(namespace,	'AssetProcessed');
  	 	transferEvent.liveAsset = liveAsset;
   		transferEvent.transferGHG = liveAsset.aggregatedGHG;
-    	await emit(transferEvent);  	
-      
+    	await emit(transferEvent);  	      
     }    
 
+}
 
+
+ async function ProduceMeat(processing) {  
+    let factory = await getFactory();
+  
+    // creating cell phone
+    const meatReg = await getAssetRegistry(namespace + '.Steak');   
+
+    // getting next id
+    let existingMeats = await meatReg.getAll();
+  	let numberOfMeats = 0;
+  
+    await existingMeats.forEach(function (meat) {
+      numberOfMeats ++;
+    });
+ 	numberOfMeats ++; 	
+
+    const meat = await factory.newResource(namespace, 'Steak', numberOfMeats.toString());
+   
+    meat.assetStatus = "PROCESSED";
+    meat.aggregatedGHG = processing.GHG;
+    meat.atState = processing;
+    meat.amount = 1;
+    await meatReg.add(meat);       
+  
+  	// emitting create event
+
+    let createEvent = factory.newEvent(namespace, 'AssetProduced');
+  	createEvent.liveAsset = meat;
+  	createEvent.creationGHG = meat.aggregatedGHG;
+    await emit(createEvent);  	
 }
 
 
