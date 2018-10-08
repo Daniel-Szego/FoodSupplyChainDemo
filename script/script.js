@@ -152,16 +152,18 @@ async function ClearDataFunction(param) {
  * @transaction
  */
 async function ProcessFunction(param) {  
-	let assetToTransfer = param.assetToTransfer;
-    let fromCompany = param.fromCompany;
-    let toCompany = param.toCompany;
+	let liveAsset = param.liveAsset;
+    let fromState = param.fromState;
+    let toState = param.toState;
+  
+    liveAsset.assetStatus = "PROCESSED";
   
   	// checking if transfer is valid
     
-    if(toCompany.transportFrom) {
+    if(fromState.stateFrom) {
       	let isValidTransfer = false;
-	    await toCompany.transportFrom.forEach(function (company) {
-			if(company == fromCompany)
+	    await toState.stateFrom.forEach(function (state) {
+			if(state == fromState)
             {
               	isValidTransfer = true;
             }
@@ -171,20 +173,44 @@ async function ProcessFunction(param) {
         }  
     }
     	
-  	assetToTransfer.atCompany = toCompany;
-    assetToTransfer.aggregatedGHG = assetToTransfer.aggregatedGHG + toCompany.GHG;     	  assetToTransfer.assetStatus = "ON_THE_ROAD";
-  	
-    const cellPhoneReg = await getAssetRegistry(namespace + '.CellPhone'); 
-    await cellPhoneReg.update(assetToTransfer);    
+  	liveAsset.atState = toState;
+    liveAsset.aggregatedGHG = liveAsset.aggregatedGHG + toState.GHG;     	  
+    
+    if (fromState.$type == "Processing") {
+    	// producing meat from cow
+     	 
+    	
+      	
+      
+    } else {
+    	
+    	liveAsset.assetStatus = "PROCESSED";	
+      	var liveAssetReg;
+      	if (liveAsset.$type == "Cow") {
+		     liveAssetReg = await getAssetRegistry(namespace + '.Cow');        
+        }
+        else if (liveAsset.$type == "Steak") {
+		     liveAssetReg = await getAssetRegistry(namespace + '.Steak');            
+        }
+        else {
+		     liveAssetReg = await getAssetRegistry(namespace + '.LiveAsset');         
+        }
+      
+    	await liveAssetReg.update(liveAsset);    
   
-  	// emitting Transfer event
-    let factory = await getFactory();
+  		// emitting Transfer event
+    	let factory = await getFactory();
 
-    let transferEvent = factory.newEvent('org.supplychain.green.model', 'AssetTransferred');
-  	transferEvent.gHGcarrierAsset = assetToTransfer;
-  	transferEvent.transferGHG = assetToTransfer.aggregatedGHG;
-    await emit(transferEvent);  	
+	    let transferEvent = factory.newEvent(namespace,	'AssetProcessed');
+ 	 	transferEvent.liveAsset = liveAsset;
+  		transferEvent.transferGHG = liveAsset.aggregatedGHG;
+    	await emit(transferEvent);  	
+      
+    }    
+
+
 }
+
 
 /**
  *
