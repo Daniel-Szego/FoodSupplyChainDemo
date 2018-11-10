@@ -1,0 +1,67 @@
+<!--
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <p class="network-name">foodsupplychain@0.0.2-deploy.42.bna</p>
+        <p class="navbar-brand">foodsupplychain</p>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="dropdown active">
+            <a class="dropdown-toggle" data-toggle="dropdown">Assets</a>
+            <ul class="dropdown-menu scrollable-menu">
+              
+              <li><a [routerLink]="['/Cow']">Cow</a></li>
+              
+              <li><a [routerLink]="['/Steak']">Steak</a></li>
+              
+            </ul>
+        </li>
+        <li class="dropdown active">
+          <a class="dropdown-toggle" data-toggle="dropdown">Participants</a>
+          <ul class="dropdown-menu scrollable-menu">
+            
+            <li><a [routerLink]="['/Production']">Production</a></li>
+            
+            <li><a [routerLink]="['/Processing']">Processing</a></li>
+            
+            <li><a [routerLink]="['/Distribution']">Distribution</a></li>
+            
+            <li><a [routerLink]="['/Retail']">Retail</a></li>
+            
+            <li><a [routerLink]="['/Restaurant']">Restaurant</a></li>
+            
+          </ul>
+      </li>
+      <li class="dropdown active">
+        <a class="dropdown-toggle" data-toggle="dropdown">Transactions</a>
+        <ul class="dropdown-menu scrollable-menu">
+          
+          <li><a [routerLink]="['/InitTestData']">InitTestData</a></li>
+          
+          <li><a [routerLink]="['/ClearData']">ClearData</a></li>
+          
+          <li><a [routerLink]="['/Process']">Process</a></li>
+          
+          <li><a [routerLink]="['/Produce']">Produce</a></li>
+          
+          <li><a [routerLink]="['/Consume']">Consume</a></li>
+          
+        </ul>
+    </li>
+      </ul>
+    </div>
+  </nav>
+  
+  <router-outlet></router-outlet>
